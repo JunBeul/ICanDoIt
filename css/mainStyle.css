@@ -1,0 +1,231 @@
+:root {
+  --background: white;
+  --board-background: #eee;
+  --card-background: white;
+  --border-color: #eee;
+  --font-color: #333;
+  --main-color: #9ADFDF;
+}
+
+* {
+  box-sizing: border-box;
+  color: var(--font-color);
+}
+
+body {
+  position: relative;
+  max-height: 100vh;
+  margin: 0;
+  overflow-y: hidden;
+  background: var(--background);
+  transition: 0.3s;
+}
+
+header {
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+  height: 5rem;
+  background-color: var(--main-color);
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.dark-mode {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5rem;
+  margin: 1.5rem;
+  height: 3rem;
+}
+
+#dark-mode {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+}
+
+.container {
+  display: flex;
+  height: calc(100vh - 5rem);
+  padding: 1rem 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.board {
+  border-radius: 10px;
+  margin: 0.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  width: 312px;
+  min-width: 312px;
+  max-height: calc(100% - 1rem);
+  position: relative;
+}
+.board:nth-child(1){
+  background-color: #CAF8F8;
+}
+.board:nth-child(1)::before{
+  content: '';
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  border-bottom: calc( 18px * 1.732 ) solid #666666;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  position: absolute;
+  transform: translate(0, -50%) rotate(90deg);
+  top: 50%;
+  left: 340px;
+}
+.board:nth-child(2){
+  background-color: #FDFF9C;
+}
+.board:nth-child(2)::before{
+  content: '';
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  border-bottom: calc( 18px * 1.732 ) solid #666666;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  position: absolute;
+  transform: translate(0, -50%) rotate(90deg);
+  top: 50%;
+  left: 340px;
+}
+.board:nth-child(3){
+  background-color: #FFBBE4;
+}
+
+.board-title {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-title h3 {
+  margin: 0;
+  display: inline;
+}
+
+.board button {
+  background: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.board-action {
+  transition: 0.3s;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.board-action:hover {
+  background: rgba(99, 99, 99, 0.2);
+}
+
+.list {
+  overflow-y: auto;
+  padding: 10px;
+  min-height: 56px;
+}
+
+.card {
+  box-shadow: 0 5px 12px #3335;
+  margin: 25px 0 50px 0;
+  padding: 0.8rem;
+  background: var(--card-background);
+  font-family: '돋음';
+  position: relative;
+}
+.card:last-child{
+  margin-bottom: 10px;
+}
+.card::after{
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 30px;
+  background-color: var(--my-color);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%) rotate(25deg);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  word-break: break-all;
+}
+
+.card>textarea {
+  resize: none;
+  width: 100%;
+  overflow: hidden;
+  font-size: 1.5rem;
+  font-family: inherit;
+  background: var(--background);
+}
+
+textarea.text:onfocus {
+  background: blue;
+}
+
+
+.card-content {
+  color: #555;
+  color: var(--font-color);
+}
+
+.shadow {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.shadow .card-title {
+  opacity: 0;
+}
+
+.hide {
+  display: none;
+}
+
+.center {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trash {
+  display: none;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 5rem;
+  top: 0;
+  z-index: 1000;
+}
+
+.trash::before {
+  content: '삭제는 여기로';
+  font-size: 1.3rem;
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
