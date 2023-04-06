@@ -50,18 +50,28 @@ const container = $('.container');
 const boardStore = new BoardStore(container);
 const [ENTER, ESC] = [13, 27];
 const trash = $('.trash');
+const closeBtn = $('.close');
 
 let dragCard = null;
 let dragBoard = null;
+let cardTitle = null;
+
+//modal Event
+closeBtn.on('click', onModalClose)
 
 // Container Event
 container.on('dragover', onContainerDragover)
 container.on('mousewheel', onWheelScroll)
 
 // Card Event
-$$('.card').on('dragstart', onCardDragstart).on('dragend', onCardDragend);
+$$('.card')
+  .on('dragstart', onCardDragstart)
+  .on('dragend', onCardDragend)
+  .on('click', onModalOpen);
 
 $$('.list').on('dragover', onCardListDragover);
+
+$$('.add-card-btn').on('click', onAddCardBtnClick);
 
 $$('.add-card-btn').on('click', onAddCardBtnClick);
 
@@ -75,6 +85,11 @@ trash
 function resizeTextarea() {
   this.style.height = 'auto';
   this.style.height = this.scrollHeight + 'px';
+}
+
+function onModalClose(){
+  $('.modalOverlay').style.display = 'none';
+  localStorage.setItem(cardTitle, $('.card-text').value);
 }
 
 function onAddCardBtnClick(e) {
@@ -101,7 +116,7 @@ function onAddCardBtnClick(e) {
       textarea.removeEventListener('blur', removeCard);
       card.innerHTML = `<div class="card-title">${textarea.value}</div>`;
       boardStore.saveHTML();
-      this.click();
+      location.reload();
     })
 
   const cardList = this.parentNode.parentNode.querySelector('.list');
@@ -115,6 +130,12 @@ function onCardDragstart(e) {
     this.classList.add('shadow');
     trash.style.display = 'block';
   });
+}
+
+function onModalOpen(e){
+  $('.modalOverlay').style.display = 'flex';
+  $('.card-title').innerText = cardTitle = e.target.innerText;
+  $('.card-text').value = localStorage.getItem(cardTitle);
 }
 
 function onCardDragend(e) {
