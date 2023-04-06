@@ -1,3 +1,5 @@
+import gptReply from "./gptReply.js";
+
 const $ = q => document.querySelector(q);
 const $$ = q => document.querySelectorAll(q);
 
@@ -51,13 +53,25 @@ const boardStore = new BoardStore(container);
 const [ENTER, ESC] = [13, 27];
 const trash = $('.trash');
 const closeBtn = $('.close');
+const modalText = $('.modal-text');
 
 let dragCard = null;
 let dragBoard = null;
 let cardTitle = null;
+let getKey = null;
 
 //modal Event
 closeBtn.on('click', onModalClose)
+modalText.on('keydown', e => {
+  let targetValue = e.target.value.split("\n");
+  if(e.keyCode  == 13){
+    if(targetValue[targetValue.length-1][0] == '/'){
+      let getGptReply = gptReply(targetValue[targetValue.length-1].slice(1));
+
+      e.target.value += "\n"+ getGptReply;
+    }
+  }
+});
 
 // Container Event
 container.on('dragover', onContainerDragover)
@@ -70,9 +84,6 @@ $$('.card')
   .on('click', onModalOpen);
 
 $$('.list').on('dragover', onCardListDragover);
-
-$$('.add-card-btn').on('click', onAddCardBtnClick);
-
 $$('.add-card-btn').on('click', onAddCardBtnClick);
 
 // Trash Can Event
@@ -89,13 +100,15 @@ function resizeTextarea() {
 
 function onModalClose(){
   $('.modalOverlay').style.display = 'none';
-  localStorage.setItem(cardTitle, $('.card-text').value);
+  localStorage.setItem(getKey, $('.modal-text').value);
 }
 
 function onAddCardBtnClick(e) {
   const colors = `hsl(${parseInt(Math.random() * 24, 10) * 15}, 42%, 57%)`;
+  let key = new Date().getTime().toString(36);
+
   const card = createElementString(`
-        <div class="card" draggable="true" style="--my-color: ${colors}">
+        <div class="card" draggable="true" id="${key}" id="${key}" style="--my-color: ${colors}">
             <textarea rows="1" placeholder="내용 입력 후 엔터"></textarea>
         </div>`);
   card.on('dragstart', onCardDragstart).on('dragend', onCardDragend);
@@ -134,8 +147,13 @@ function onCardDragstart(e) {
 
 function onModalOpen(e){
   $('.modalOverlay').style.display = 'flex';
-  $('.card-title').innerText = cardTitle = e.target.innerText;
-  $('.card-text').value = localStorage.getItem(cardTitle);
+  $('.modal-title').innerText = cardTitle = e.target.innerText;
+  if(e.target.getAttribute('id') == null){
+    getKey = e.target.parentNode.getAttribute('id');
+  } else {
+    getKey = e.target.getAttribute('id');
+  }
+  $('.modal-text').value = localStorage.getItem(getKey);
 }
 
 function onCardDragend(e) {
