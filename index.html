@@ -52,7 +52,29 @@
   
   <div class="trash" style="display: none;"></div>
 
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js">
+    document.querySelector('#send').addEventListener('click', function(){
+
+      let template1 = `<div class="line">
+        <div class="chat-box mine">
+          ${document.querySelector('#input').value}
+        </div>
+      </div>`;
+      document.querySelector('.chat-content').insertAdjacentHTML('beforeend',  template1);
+
+
+      let q = 'http://localhost:8080/translate?q=' + document.querySelector('#input').value;
+      axios.get(q).then(r => {
+
+        var r = JSON.parse(r.data).message.result.translatedText;
+        console.log(r);
+
+        let template2 = `<div class="line">
+          <div class="chat-box">${r}</div>
+        </div>`;
+        document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template2);
+      }).catch((error)=>{console.log('실패',error)})
+  </script>
 </body>
 
 </html>
